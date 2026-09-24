@@ -7,12 +7,13 @@ Escuela de Diseño UDP
 Autor: Felipe Roa R.
 
 Demo: https://solfrias1.github.io/Realidades/
-
+Repo: https://github.com/SolFrias1/Realidades
 ---
 
 ## Reflexión
 
 ¿Qué es la percepción, al final, sino aquello que solo nosotros podemos ver?
+
 Cada mirada selecciona. Lo que para uno puede ser evidente, para otro puede adquirir un sentido completamente distinto; no porque exista necesariamente una única verdad detrás de aquello que observamos, sino porque cada forma de percibir está configurada para reconocer ciertas cosas y dejar otras fuera.
 
 Una representación nunca es aquello que representa; se puede convertir un cuerpo en puntos, coordenadas, siluetas o diferencias, pero ninguna de esas formas consigue contenerlo por completo. Al representar, algo se revela y, al mismo tiempo, algo queda fuera.
