@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Existir como estructura vs. existir como acontecimiento</title>
+<meta name="description" content="¿Qué ocurre cuando una máquina recuerda tu forma, mientras otra solo recuerda tus cambios? Dos lecturas visuales contrapuestas.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="pond-background">
+  <canvas id="mouseRippleCanvas" class="mouse-ripple-canvas"></canvas>
+  <div class="pond-overlay"></div>
+  <div class="water-caustics"></div>
+  <div class="ambient-glow"></div>
+</div>
+
+<header class="site-header">
+  <p class="eyebrow">Criterios de Existencia</p>
+  <h1 class="main-title">Existir como estructura<br>vs. existir como acontecimiento</h1>
+  <p class="subtitle-medium">¿Qué ocurre cuando una máquina recuerda tu forma, mientras otra solo recuerda tus cambios?</p>
+
+  <!-- Texto de Reflexión Conceptual -->
+  <section class="reflection-intro" aria-label="Reflexión">
+    <p>
+      La obra explora cómo una misma realidad puede producir distintas formas de existencia dependiendo de aquello que se decide observar. Porque percibir no es simplemente recibir información: también es seleccionar, reducir e interpretar.
+    </p>
+    <p>
+      Frente a una misma cámara, cada sistema construye una versión posible de lo que ocurre a partir de aquello que puede reconocer; uno encuentra una estructura corporal, mientras el otro registra únicamente aquello que cambia. Lo observado permanece, pero la lectura lo transforma.
+    </p>
+    <p>
+      Estas versiones no buscan establecer una única verdad, sino hacer visible que toda interpretación tiene un punto de vista y, por lo tanto, un límite. Cada sistema revela algo y, al mismo tiempo, deja otras cosas fuera. Tal vez comprender una realidad no consiste en reducirla a una sola explicación, sino en permitir que pueda existir de distintas maneras al mismo tiempo. Nunca dejas de ser tú frente a la cámara; simplemente aparece una versión de ti que quizás todavía no habías conocido aún.
+    </p>
+  </section>
+
+  <!-- Interruptor táctil: Sensor Óptico -->
+  <section class="controls">
+    <div class="switch-container">
+      <span class="switch-label" id="switchLabel">Sensor Óptico</span>
+      <button class="tactile-switch" id="cameraToggle" type="button" role="switch" aria-checked="false" aria-labelledby="switchLabel">
+        <span class="switch-track">
+          <span class="switch-glow"></span>
+          <span class="switch-thumb">
+            <span class="switch-led"></span>
+          </span>
+        </span>
+      </button>
+    </div>
+    
+    <!-- Texto de estado con jerarquía en dos líneas -->
+    <div id="statusMsg" class="status-msg" role="status" aria-live="polite">
+      <span class="status-line-1">Todavía no veo nada.</span>
+      <span class="status-line-2">Por ahora, literalmente no estamos viendo nada.</span>
+    </div>
+  </section>
+</header>
+
+<main>
+  <!-- Layout Dual Monumental: Dos realidades amplias contrapuestas -->
+  <section class="dual-stage" id="dualStage" aria-label="Las dos realidades de existencia">
+
+    <!-- REALIDAD 01: Existir como estructura -->
+    <article class="reality-card" id="cardStructure">
+      <header class="reality-header">
+        <h2>Existir como estructura</h2>
+        <p class="reality-question">¿Qué reconoce la máquina cuando intenta entender un cuerpo?</p>
+        <div class="concept-tags">
+          <span>malla continua</span> · <span>proximidad</span> · <span>memoria</span> · <span>huellas</span> · <span>persistencia</span>
+        </div>
+      </header>
+      <div class="reality-viewport">
+        <canvas id="canvasStructure" width="640" height="540"></canvas>
+        <div class="pond-reflection-overlay"></div>
+      </div>
+      <footer class="reality-caption">
+        <p id="statStructure">Estructura en reposo</p>
+      </footer>
+    </article>
+
+    <!-- REALIDAD 02: Existir como acontecimiento -->
+    <article class="reality-card" id="cardEvent">
+      <header class="reality-header">
+        <h2>Existir como acontecimiento</h2>
+        <p class="reality-question">¿Qué queda cuando la máquina deja de intentar entender al humano?</p>
+        <div class="concept-tags">
+          <span>tinta líquida</span> · <span>corrientes</span> · <span>fricción</span> · <span>calor</span> · <span>disolución</span>
+        </div>
+      </header>
+      <div class="reality-viewport">
+        <canvas id="canvasEvent" width="640" height="540"></canvas>
+        <div class="pond-reflection-overlay"></div>
+      </div>
+      <footer class="reality-caption">
+        <p id="statEvent">Superficie neutra // Sin alteración</p>
+      </footer>
+    </article>
+
+  </section>
+
+  <!-- Manifiesto explicativo de los dos criterios de existencia -->
+  <section class="manifesto-section">
+    <h2>Dos criterios de existencia</h2>
+    <div class="manifesto-grid dual-grid">
+      <div class="manifesto-item">
+        <h3>El cuerpo como forma suspendida</h3>
+        <p>
+          Una lectura descompone la figura humana en una constelación de facetas geométricas translúcidas. Reacciona a la distancia real del observador: al acercarse, el plano enfoca la topografía facial y torácica; al alejarse o desplazarse, deja suspendida una huella fósil en el agua cuya separación responde a la velocidad, creando una arqueología estructurada de formas etéreas que persisten en el estanque.
+        </p>
+      </div>
+      <div class="manifesto-item">
+        <h3>El cuerpo como consecuencia del cambio</h3>
+        <p>
+          Esta lectura ignora la identidad y la anatomía humana; trabaja puramente con matrices de densidad cinética y fricción. El movimiento genera corrientes cromáticas, torbellinos de calor y estelas líquidas de color que se arremolinan con el desplazamiento. La presencia existe únicamente mientras altera el espacio: si el sujeto se detiene, la perturbación se disipa y la persona desaparece en la quietud, mientras como todo caos el movimiento lo revive.
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>Felipe Roa R. // DPPI 2026 — Escuela de Diseño UDP</p>
+  <p class="sub-footer">MediaPipe Pose Triangulated Mesh + OpenCV Frame Difference Engine en tiempo real</p>
+</footer>
+
+<!-- Elementos invisibles para captura de cámara y muestreo de diferencia de frames -->
+<video id="video" playsinline autoplay muted></video>
+<canvas id="hiddenDiffSample" width="160" height="120"></canvas>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
