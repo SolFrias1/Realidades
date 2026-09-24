@@ -45,6 +45,9 @@ Quizás percibir no consiste en encontrar una realidad definitiva, sino en recon
   * *Hacia abajo*: Violeta eléctrico.
   * *Movimientos laterales*: Cian puro y amarillo solar.
 * **"El Espejismo" (Descomposición Prismática de la Luz)**: Cada perturbación se disgrega en sus colores primarios con dispersión prismática (RGB split) en capas offset que simulan la refracción en agua turbulenta.
+* Brusquedad de movimiento : 
+  * *Si mueves la mano suave y continuo: el agua se aparta dócilmente y solo abres un surco o corriente detrás de tus dedos (las estelas de color).
+  * *Si aceleras de golpe o haces un movimiento seco: rompes la tensión superficial y el agua no alcanza a esquivar tu mano a tiempo, liberando esa fuerza acumulada en forma de onda de choque que se expande hacia los extremos (las ondas de expansión).
 * **Cero memoria**: En ausencia de movimiento, el espejismo se disipa y evapora en menos de 1 segundo, devolviendo el espacio a la quietud y oscuridad absoluta.
 
 ---
