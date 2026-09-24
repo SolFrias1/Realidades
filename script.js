@@ -7,16 +7,16 @@
 //     - Malla geométrica continua en constelación de luz.
 //     - Huellas fósiles que persisten ~20s en el estanque.
 //
-//   Realidad 2: "Existir como acontecimiento" (OpenCV Espejismo Espectral)
-//     - Reacción cromática por velocidad y dirección del movimiento:
-//         * Movimiento lento/suave -> Cian o azul profundo (agua tranquila)
-//         * Movimiento rápido/brusco -> Naranja, rojo intenso y magenta (calor y fricción)
-//         * Hacia arriba -> Verde lima
-//         * Hacia abajo -> Violeta eléctrico
-//         * Movimientos laterales -> Cian y amarillo solar
-//     - "El Espejismo": Descomposición espectral en los colores primarios de la luz
-//         con dispersión prismática en agua turbulenta.
-//     - Rápida evaporación en quietud (cero memoria).
+//   Realidad 2: "Existir como acontecimiento" (OpenCV - La Consecuencia del Acontecimiento)
+//     - "No queda una figura, sino la consecuencia de haber estado allí".
+//     - La imagen opera como una materia sensible al acontecimiento.
+//     - Cinco estados de transición:
+//         1. cambio: El punto de inflexión donde la quietud reacciona a la presencia.
+//         2. corriente: Flujo óptico denso que traduce el desplazamiento en arrastre fluido.
+//         3. expansión: Onda de choque elíptica propagada por la velocidad del cuerpo.
+//         4. intensidad: La aceleración que quema, deforma u oscurece los reflejos.
+//         5. disipación: El lento retorno matemático al silencio y quietud original.
+//     - Descomposición espectral prismática (RGB split) sobre el agua turbulenta.
 // ============================================================================
 
 const VISION_BUNDLE_URL = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
@@ -66,13 +66,18 @@ let smoothLandmarks = null;
 let smoothHands = [];
 const LERP_FACTOR = 0.42;
 
-// Estado Sistema 2 (Acontecimiento - OpenCV Espejismo Espectral)
+// Estado Sistema 2 (Acontecimiento - OpenCV: La Consecuencia del Acontecimiento)
+// Estados conceptuales: cambio · corriente · expansión · intensidad · disipación
 const DIFF_W = 160;
 const DIFF_H = 120;
 let prevGrayFrame = null;
-let liquidMiragePuffs = [];
-const MAX_MIRAGE_PUFFS = 220;
-let disturbanceIntensity = 0;
+let fluidStreams = [];
+const MAX_FLUID_STREAMS = 120;
+let shockwaves = [];
+const MAX_SHOCKWAVES = 18;
+let kineticEnergy = 0;
+let prevAverageSpeed = 0;
+let currentTransitionState = "silencio";
 
 // ---------------------------------------------------------------------------
 // Ayuda de Texto de Estado
@@ -148,10 +153,14 @@ function stopCamera(updateStatus = true) {
   smoothLandmarks = null;
   smoothHands = [];
   prevGrayFrame = null;
-  liquidMiragePuffs = [];
+  fluidStreams = [];
+  shockwaves = [];
+  kineticEnergy = 0;
+  prevAverageSpeed = 0;
+  currentTransitionState = "silencio";
 
   statStructure.textContent = "Estructura en reposo";
-  statEvent.textContent = "Superficie neutra // Sin alteración";
+  statEvent.textContent = "Silencio // Superficie en reposo";
 }
 
 async function initModels() {
@@ -533,16 +542,26 @@ function drawSystem1_Structure(bodyLandmarks, handsLandmarks, timestampMs) {
 // - Lento/Suave: Cian o azul profundo
 // - Rápido/Brusco: Naranja, rojo intenso o magenta (calor y fricción)
 // - Hacia arriba: Verde lima
-// - Hacia abajo: Violeta eléctrico
-// - Laterales: Cian o amarillo solar
-// - "El Espejismo": Descomposición de la estela en colores primarios de la luz
+// ---------------------------------------------------------------------------
+// Realidad 2: "Existir como acontecimiento" (OpenCV - La Consecuencia del Acontecimiento)
+//
+//   Paradigma conceptual y temporal:
+//   - "No queda una figura, sino la consecuencia de haber estado allí"
+//   - La imagen es materia sensible: el cuerpo no es dibujado; se registra
+//     exclusivamente el rastro del caos generado en el agua.
+//   - 5 Estados de transición:
+//       1. cambio: El punto de inflexión donde la quietud reacciona ante la presencia.
+//       2. corriente: Flujo óptico denso que traduce el desplazamiento en arrastre fluido.
+//       3. expansión: Onda de choque elíptica que se propaga con la velocidad del cuerpo.
+//       4. intensidad: La aceleración que quema, deforma y oscurece los reflejos.
+//       5. disipación: El lento retorno matemático al silencio y quietud original.
 // ---------------------------------------------------------------------------
 
 function drawSystem2_Event(timestampMs) {
   const w = canvasEvent.width;
   const h = canvasEvent.height;
 
-  // 1. Muestreo de video en baja resolución
+  // 1. Muestreo de video en baja resolución para análisis diferencial
   ctxDiff.drawImage(video, 0, 0, DIFF_W, DIFF_H);
   const frameData = ctxDiff.getImageData(0, 0, DIFF_W, DIFF_H).data;
 
@@ -553,7 +572,7 @@ function drawSystem2_Event(timestampMs) {
     currentGray[i] = 0.299 * frameData[px] + 0.587 * frameData[px + 1] + 0.114 * frameData[px + 2];
   }
 
-  // 2. Análisis de flujo óptico y vectores de movimiento (dirección + velocidad)
+  // 2. Análisis de flujo óptico y vectores de fuerza cinética
   let activeMotionPoints = [];
   if (prevGrayFrame) {
     for (let y = 2; y < DIFF_H - 2; y += 2) {
@@ -568,162 +587,224 @@ function drawSystem2_Event(timestampMs) {
           const gt = currentGray[i] - prevGrayFrame[i];
 
           const gradMagSq = gx * gx + gy * gy + 0.08;
-          // Vector de velocidad óptica
           const vx = -(gt * gx) / gradMagSq;
           const vy = -(gt * gy) / gradMagSq;
+          const speed = Math.hypot(vx, vy);
 
           activeMotionPoints.push({
             x, y, diff,
             vx: Math.max(-4, Math.min(4, vx)),
-            vy: Math.max(-4, Math.min(4, vy))
+            vy: Math.max(-4, Math.min(4, vy)),
+            speed: speed
           });
         }
       }
     }
 
     const motionRatio = activeMotionPoints.length / (totalPixels / 4);
-    disturbanceIntensity = disturbanceIntensity * 0.85 + motionRatio * 0.15;
+    kineticEnergy = kineticEnergy * 0.88 + motionRatio * 0.12;
 
-    // Generación del espejismo espectral
+    const speedNormAverage = activeMotionPoints.length > 0
+      ? (activeMotionPoints.reduce((acc, p) => acc + p.speed, 0) / activeMotionPoints.length) / 4.0
+      : 0;
+
+    const acceleration = Math.max(0, speedNormAverage - prevAverageSpeed);
+    prevAverageSpeed = prevAverageSpeed * 0.75 + speedNormAverage * 0.25;
+
+    // 3. Generación de Corrientes Fluidas y Ondas de Choque
     if (activeMotionPoints.length > 0) {
-      activeMotionPoints.sort((a, b) => b.diff - a.diff);
-      const spawnCount = Math.min(30, Math.floor(activeMotionPoints.length * 0.38) + 3);
+      // Priorizar zonas de mayor fricción
+      activeMotionPoints.sort((a, b) => (b.diff * b.speed) - (a.diff * a.speed));
+      const maxNewStreams = Math.min(10, Math.floor(activeMotionPoints.length * 0.26) + 1);
 
-      for (let k = 0; k < spawnCount; k++) {
-        if (liquidMiragePuffs.length >= MAX_MIRAGE_PUFFS) break;
-        const pt = activeMotionPoints[k % activeMotionPoints.length];
+      for (let k = 0; k < maxNewStreams; k++) {
+        if (fluidStreams.length >= MAX_FLUID_STREAMS) break;
+        const pt = activeMotionPoints[k];
 
         const px = (pt.x / DIFF_W) * w;
         const py = (pt.y / DIFF_H) * h;
+        const speedNorm = Math.min(1.0, (pt.speed + (pt.diff / 35.0)) * 0.45);
 
-        const speed = Math.hypot(pt.vx, pt.vy);
-        const speedNorm = Math.min(1.0, (speed + (pt.diff / 40.0)) * 0.5);
-
-        // DETERMINACIÓN DE COLOR SEGÚN REGLA PERCEPTUAL:
-        // 1. Velocidad:
-        //    - Lento -> Cian o azul profundo
-        //    - Rápido -> Naranja, rojo o magenta
-        // 2. Dirección:
-        //    - Hacia arriba -> Verde lima
-        //    - Hacia abajo -> Violeta
-        //    - Lateral izquierdo -> Cian
-        //    - Lateral derecho -> Amarillo
-        let primaryHue = 195; // base azul profundo
-        let isFast = speedNorm > 0.55;
+        // Color espectral según velocidad y dirección:
+        let primaryHue = 195;
+        let isFast = speedNorm > 0.52;
 
         if (isFast) {
-          // Fricción violenta / calor rápido
-          const heatOptions = [20, 5, 335]; // Naranja, Rojo intenso, Magenta
+          const heatOptions = [20, 8, 335]; // Naranja solar, rojo incandescente, magenta
           primaryHue = heatOptions[Math.floor(Math.random() * heatOptions.length)];
         } else {
-          // Dirección dominante
           const absVx = Math.abs(pt.vx);
           const absVy = Math.abs(pt.vy);
 
-          if (absVy > absVx * 0.8 && absVy > 0.25) {
-            if (pt.vy < 0) {
-              // Mano hacia arriba: VERDE LIMA
-              primaryHue = 98;
-            } else {
-              // Mano hacia abajo: VIOLETA
-              primaryHue = 280;
-            }
-          } else if (absVx > 0.25) {
-            if (pt.vx > 0) {
-              // Movimiento derecha: AMARILLO
-              primaryHue = 52;
-            } else {
-              // Movimiento izquierda: CIAN
-              primaryHue = 180;
-            }
+          if (absVy > absVx * 0.75 && absVy > 0.22) {
+            primaryHue = (pt.vy < 0) ? 98 : 280; // Arriba: Verde Lima | Abajo: Violeta
+          } else if (absVx > 0.22) {
+            primaryHue = (pt.vx > 0) ? 52 : 180; // Derecha: Amarillo Solar | Izquierda: Cian
           } else {
-            // Movimiento suave neutro: Azul profundo / Cian
-            primaryHue = 205;
+            primaryHue = 202; // Calma líquida azul profundo
           }
         }
 
-        liquidMiragePuffs.push({
-          x: px + (Math.random() - 0.5) * 14,
-          y: py + (Math.random() - 0.5) * 14,
-          vx: pt.vx * 1.5 + (Math.random() - 0.5) * 0.8,
-          vy: pt.vy * 1.5 - 0.2, // ligera flotabilidad
-          radius: 16 + Math.random() * 26,
-          maxLife: 30 + Math.random() * 25, // ~0.8s a 1.1s de disolución
-          age: 0,
+        fluidStreams.push({
+          x: px,
+          y: py,
+          vx: pt.vx * 1.8,
+          vy: pt.vy * 1.8 - 0.15,
+          width: 12 + speedNorm * 36,
           primaryHue: primaryHue,
-          speedNorm: speedNorm
+          speedNorm: speedNorm,
+          isFast: isFast,
+          age: 0,
+          maxLife: 70 + Math.floor(speedNorm * 45), // 2.5s a 3.5s de disipación gradual
+          points: [
+            { x: px - pt.vx * 18, y: py - pt.vy * 18 },
+            { x: px - pt.vx * 8, y: py - pt.vy * 8 },
+            { x: px, y: py }
+          ]
         });
+      }
+
+      // Expansión: Onda de choque ante aceleraciones bruscas
+      if (acceleration > 0.25 || (speedNormAverage > 0.58 && Math.random() < 0.35)) {
+        if (shockwaves.length < MAX_SHOCKWAVES) {
+          const epic = activeMotionPoints[0];
+          const ex = (epic.x / DIFF_W) * w;
+          const ey = (epic.y / DIFF_H) * h;
+          const shockAngle = Math.atan2(epic.vy, epic.vx) + Math.PI * 0.5;
+
+          shockwaves.push({
+            x: ex,
+            y: ey,
+            angle: shockAngle,
+            radius: 8,
+            maxRadius: 100 + speedNormAverage * 120,
+            speed: 3.2 + speedNormAverage * 4.5,
+            life: 1.0,
+            decay: 0.016,
+            hue: (speedNormAverage > 0.5) ? 22 : 185
+          });
+        }
       }
     }
   }
   prevGrayFrame = currentGray;
 
-  // 3. Fondo con evaporación activa en quietud
-  ctxEvent.fillStyle = "rgba(4, 9, 7, 0.20)";
+  // 4. Fondo con disipación matemática gradual
+  // Opacidad baja (0.075) para preservar el velo del estanque y la inercia del movimiento
+  ctxEvent.fillStyle = "rgba(4, 9, 7, 0.075)";
   ctxEvent.fillRect(0, 0, w, h);
 
-  // 4. Renderizado: El Espejismo (Descomposición en colores primarios de la luz)
+  // 5. Renderizado: Corrientes continuas y Espejismo de luz
   ctxEvent.save();
   ctxEvent.globalCompositeOperation = "screen";
 
-  liquidMiragePuffs = liquidMiragePuffs.filter(p => p.age < p.maxLife);
+  fluidStreams = fluidStreams.filter(s => s.age < s.maxLife);
 
-  for (let p of liquidMiragePuffs) {
-    p.age++;
-    p.x += p.vx;
-    p.y += p.vy;
-    p.vx *= 0.93;
-    p.vy *= 0.93;
+  for (let s of fluidStreams) {
+    s.age++;
+    s.x += s.vx;
+    s.y += s.vy;
+    s.vx *= 0.94;
+    s.vy *= 0.94;
 
-    const progress = p.age / p.maxLife;
-    const alpha = Math.sin(progress * Math.PI) * 0.65;
-    const curRad = p.radius * (0.85 + progress * 0.65);
+    s.points.unshift({ x: s.x, y: s.y });
+    if (s.points.length > 5) s.points.pop();
 
-    // Separación espectral (Prismatic aberration offset)
-    const splitDist = Math.max(2.5, p.speedNorm * 7.5);
+    const progress = s.age / s.maxLife;
+    const alpha = Math.sin((1 - progress) * Math.PI * 0.5) * 0.65;
+    if (alpha <= 0.01 || s.points.length < 2) continue;
 
-    // CAPA 1: Componente Rojo/Cálido (ligeramente adelantada)
-    const redHue = (p.primaryHue < 90 || p.primaryHue > 290) ? p.primaryHue : 15;
-    const gradR = ctxEvent.createRadialGradient(p.x + splitDist, p.y - splitDist * 0.4, 0, p.x + splitDist, p.y - splitDist * 0.4, curRad);
-    gradR.addColorStop(0, `hsla(${redHue}, 100%, 60%, ${alpha * 0.85})`);
-    gradR.addColorStop(0.5, `hsla(${redHue}, 95%, 48%, ${alpha * 0.4})`);
-    gradR.addColorStop(1, `hsla(${redHue}, 90%, 30%, 0)`);
+    const strokeWidth = s.width * (1.0 + progress * 0.7);
+    const splitDist = Math.max(2.8, s.speedNorm * 8.5);
+
+    // CAPA 1: Cresta de fricción térmica adelantada (Rojo / Ámbar)
+    const redHue = (s.primaryHue < 90 || s.primaryHue > 290) ? s.primaryHue : 16;
     ctxEvent.beginPath();
-    ctxEvent.arc(p.x + splitDist, p.y - splitDist * 0.4, curRad, 0, Math.PI * 2);
-    ctxEvent.fillStyle = gradR;
-    ctxEvent.fill();
+    ctxEvent.moveTo(s.points[0].x + splitDist, s.points[0].y - splitDist * 0.35);
+    for (let i = 1; i < s.points.length; i++) {
+      ctxEvent.lineTo(s.points[i].x + splitDist, s.points[i].y - splitDist * 0.35);
+    }
+    ctxEvent.lineWidth = strokeWidth * 0.85;
+    ctxEvent.lineCap = "round";
+    ctxEvent.lineJoin = "round";
+    ctxEvent.strokeStyle = `hsla(${redHue}, 98%, 56%, ${alpha * 0.75})`;
+    ctxEvent.stroke();
 
-    // CAPA 2: Componente Central Direccional (Verde/Amarillo/Tono principal)
-    const gradG = ctxEvent.createRadialGradient(p.x, p.y, 0, p.x, p.y, curRad);
-    gradG.addColorStop(0, `hsla(${p.primaryHue}, 100%, 65%, ${alpha * 0.95})`);
-    gradG.addColorStop(0.4, `hsla(${p.primaryHue}, 95%, 52%, ${alpha * 0.6})`);
-    gradG.addColorStop(1, `hsla(${p.primaryHue}, 90%, 35%, 0)`);
+    // CAPA 2: Corriente central direccional (Lima, Violeta, Amarillo, Cian)
     ctxEvent.beginPath();
-    ctxEvent.arc(p.x, p.y, curRad, 0, Math.PI * 2);
-    ctxEvent.fillStyle = gradG;
-    ctxEvent.fill();
+    ctxEvent.moveTo(s.points[0].x, s.points[0].y);
+    for (let i = 1; i < s.points.length; i++) {
+      ctxEvent.lineTo(s.points[i].x, s.points[i].y);
+    }
+    ctxEvent.lineWidth = strokeWidth;
+    ctxEvent.strokeStyle = `hsla(${s.primaryHue}, 100%, 62%, ${alpha * 0.95})`;
+    ctxEvent.stroke();
 
-    // CAPA 3: Componente Azul/Violeta (estela rezagada)
-    const blueHue = (p.primaryHue >= 170 && p.primaryHue <= 290) ? p.primaryHue : 220;
-    const gradB = ctxEvent.createRadialGradient(p.x - splitDist, p.y + splitDist * 0.4, 0, p.x - splitDist, p.y + splitDist * 0.4, curRad);
-    gradB.addColorStop(0, `hsla(${blueHue}, 100%, 62%, ${alpha * 0.85})`);
-    gradB.addColorStop(0.5, `hsla(${blueHue}, 95%, 50%, ${alpha * 0.4})`);
-    gradB.addColorStop(1, `hsla(${blueHue}, 90%, 30%, 0)`);
+    // CAPA 3: Estela rezagada fría (Azul profundo / Violeta)
+    const blueHue = (s.primaryHue >= 170 && s.primaryHue <= 290) ? s.primaryHue : 220;
     ctxEvent.beginPath();
-    ctxEvent.arc(p.x - splitDist, p.y + splitDist * 0.4, curRad, 0, Math.PI * 2);
-    ctxEvent.fillStyle = gradB;
-    ctxEvent.fill();
+    ctxEvent.moveTo(s.points[0].x - splitDist, s.points[0].y + splitDist * 0.35);
+    for (let i = 1; i < s.points.length; i++) {
+      ctxEvent.lineTo(s.points[i].x - splitDist, s.points[i].y + splitDist * 0.35);
+    }
+    ctxEvent.lineWidth = strokeWidth * 0.9;
+    ctxEvent.strokeStyle = `hsla(${blueHue}, 95%, 52%, ${alpha * 0.75})`;
+    ctxEvent.stroke();
+  }
+
+  // 6. Ondas de Choque (Expansión sobre el agua)
+  shockwaves = shockwaves.filter(sw => sw.life > 0 && sw.radius < sw.maxRadius);
+
+  for (let sw of shockwaves) {
+    sw.radius += sw.speed;
+    sw.life -= sw.decay;
+    sw.speed *= 0.97;
+
+    const swAlpha = Math.sin(sw.life * Math.PI) * 0.5;
+    if (swAlpha <= 0.01) continue;
+
+    ctxEvent.beginPath();
+    ctxEvent.ellipse(sw.x, sw.y, sw.radius, sw.radius * 0.65, sw.angle, 0, Math.PI * 2);
+    ctxEvent.lineWidth = 3.5 + (1 - sw.life) * 7.5;
+    ctxEvent.strokeStyle = `hsla(${sw.hue}, 100%, 65%, ${swAlpha})`;
+    ctxEvent.stroke();
+
+    if (sw.radius > 16) {
+      ctxEvent.beginPath();
+      ctxEvent.ellipse(sw.x, sw.y, sw.radius * 0.82, sw.radius * 0.54, sw.angle, 0, Math.PI * 2);
+      ctxEvent.lineWidth = 2.0;
+      ctxEvent.strokeStyle = `rgba(180, 255, 240, ${swAlpha * 0.45})`;
+      ctxEvent.stroke();
+    }
   }
 
   ctxEvent.restore();
 
-  // Subtítulo con lectura perceptual en vivo
-  if (liquidMiragePuffs.length === 0 && disturbanceIntensity < 0.005) {
-    statEvent.textContent = "Quietud absoluta // El espectro se ha disuelto";
-  } else if (disturbanceIntensity < 0.04) {
-    statEvent.textContent = `Estelas suaves en agua // ${liquidMiragePuffs.length} fragmentos prismáticos`;
+  // 7. Transición bajo los 5 estados conceptuales
+  const motionActive = activeMotionPoints.length > 5;
+  const speedNormAvg = activeMotionPoints.length > 0 
+    ? (activeMotionPoints.reduce((acc, p) => acc + p.speed, 0) / activeMotionPoints.length) / 4.0 
+    : 0;
+  const isHighAcceleration = (speedNormAvg > 0.52 && motionActive);
+
+  if (isHighAcceleration) {
+    currentTransitionState = "intensidad";
+    statEvent.textContent = "Intensidad // Aceleración crítica: turbulencia térmica y distorsión";
+  } else if (shockwaves.length > 0 && kineticEnergy > 0.20) {
+    currentTransitionState = "expansión";
+    statEvent.textContent = "Expansión // Onda de choque propagándose sobre el estanque";
+  } else if (motionActive && kineticEnergy > 0.06) {
+    currentTransitionState = "corriente";
+    statEvent.textContent = `Corriente // Arrastre cinético denso (${fluidStreams.length} estelas fluidas)`;
+  } else if (motionActive) {
+    currentTransitionState = "cambio";
+    statEvent.textContent = "Cambio // La quietud reacciona a la presencia";
+  } else if (fluidStreams.length > 0 || shockwaves.length > 0 || kineticEnergy > 0.006) {
+    currentTransitionState = "disipación";
+    statEvent.textContent = "Disipación // El agua lava el trauma del movimiento hacia el silencio";
   } else {
-    statEvent.textContent = `Espejismo espectral activo // Descomposición cromática (${liquidMiragePuffs.length} vórtices)`;
+    currentTransitionState = "silencio";
+    statEvent.textContent = "Silencio // Superficie en reposo absoluto";
   }
 }
 

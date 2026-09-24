@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 """
-Existir como acontecimiento
-============================
+Existir como acontecimiento: La Consecuencia del Acontecimiento
+=============================================================
 Obra interactiva / Visión por Computadora (OpenCV)
 
 Concepto:
-La realidad no es reconocida como un cuerpo, anatomía o identidad,
-sino exclusivamente como perturbación y cambio en el espacio.
-En quietud absoluta, la existencia se disuelve por completo.
+  "No queda una figura, sino la consecuencia de haber estado allí".
+  La materia visual opera bajo 5 estados de transición:
+    * cambio: Inflexión donde la quietud reacciona a la presencia.
+    * corriente: Arrastre cinético denso generado por el desplazamiento.
+    * expansión: Onda de choque que se propaga con la velocidad.
+    * intensidad: Fricción y aceleración que agita los reflejos.
+    * disipación: Retorno gradual y matemático hacia el silencio.
 
 Controles:
   [ESC] o [q] : Salir
   [+] / [-]   : Aumentar / Disminuir sensibilidad de detección
-  [d] / [f]   : Aumentar / Disminuir velocidad de desvanecimiento (damping)
+  [d] / [f]   : Aumentar / Disminuir persistencia / inercia de disipación (damping)
   [c]         : Alternar paleta cromática (Acuática profunda / Ámbar otoñal / Térmica espectral)
-  [r]         : Resetear acumulador de perturbación
+  [r]         : Resetear buffer de perturbación
 """
 
 import cv2
@@ -41,7 +45,8 @@ def main():
 
     print("=============================================================")
     print("EXISTIR COMO ACONTECIMIENTO // OpenCV")
-    print("La máquina no recuerda tu forma; solo recuerda tus cambios.")
+    print("No queda una figura, sino la consecuencia de haber estado allí.")
+    print("cambio · corriente · expansión · intensidad · disipación")
     print("Presiona ESC o 'q' para salir.")
     print("=============================================================")
 
