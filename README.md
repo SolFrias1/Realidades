@@ -27,20 +27,17 @@ Estas versiones no buscan establecer una única verdad, sino hacer visible que t
 * **Adaptación a proximidad y lejanía**: Al acercarse a la cámara, el plano enfoca la topografía facial y torácica; al retroceder o desplazarse, se amplía la figura completa.
 * **Huellas fósiles en el estanque**: Cada desplazamiento estampa siluetas minerales congeladas en el agua. La velocidad modula la distancia espacial entre huellas, creando una arqueología estructurada de formas etéreas que persisten flotando durante 20 segundos.
 
-### 02. El cuerpo como consecuencia del cambio (OpenCV: La Consecuencia del Acontecimiento)
-* **Premisa**: *«No queda una figura, sino la consecuencia de haber estado allí»*.
-* **Criterio de existencia**: La imagen opera como una materia sensible al acontecimiento; no se dibuja la silueta del cuerpo ni se emplean partículas genéricas. Se registra exclusivamente el rastro del caos generado en el agua un instante antes.
-* **Cinco Estados de Transición**:
-  1. **cambio:** El punto de inflexión donde la quietud del fondo reacciona ante la presencia.
-  2. **corriente:** El flujo óptico denso que traduce el desplazamiento físico en un arrastre viscoso continuo sobre el agua.
-  3. **expansión:** La onda de choque elíptica que se propaga a partir de la aceleración y velocidad del cuerpo.
-  4. **intensidad:** La aceleración que quema, deforma u oscurece los reflejos del estanque con turbulencia térmica y tonalidades solares incandescentes.
-  5. **disipación:** El lento retorno matemático al silencio y a la nítida quietud original de la imagen estática.
-* **Temporalidad del acontecimiento**:
-  * *Desplazamiento*: Abre de inmediato una corriente fluida y continua sobre los reflejos del estanque.
-  * *Aceleración*: Intensifica la distorsión, haciendo que el agua virtual se agite con mayor fuerza, opacidad y ondas de choque.
-  * *Quietud*: Al detenerse el usuario, la alteración no desaparece en seco; persiste y activa un proceso de disipación gradual y matemático (~2.5 a 3.5 segundos) donde la pantalla muestra cómo el estanque procesa el trauma del movimiento y lo lava lentamente hasta el silencio absoluto.
-* **Descomposición Prismática de la Luz**: Cada perturbación se disgrega en sus colores primarios con dispersión cromática (RGB split) en capas offset que refractan la luz a través del agua turbulenta.
+### 02. El cuerpo como consecuencia del cambio (OpenCV Espejismo Espectral)
+* **Criterio de existencia**: La densidad cinética, la fricción y la disolución activa. Ignora por completo la identidad y la anatomía humana.
+* **Reacción cromática por velocidad**:
+  * *Movimiento lento / suave*: Estelas en tonos cian eléctrico y azul profundo (agua tranquila y calma líquida).
+  * *Movimiento rápido / brusco*: Estallido en naranja solar, rojo incandescente y magenta (fricción térmica violenta y calor).
+* **Reacción cromática por dirección cinemática**:
+  * *Hacia arriba*: Verde lima brillante.
+  * *Hacia abajo*: Violeta eléctrico.
+  * *Movimientos laterales*: Cian puro y amarillo solar.
+* **"El Espejismo" (Descomposición Prismática de la Luz)**: Cada perturbación se disgrega en sus colores primarios con dispersión prismática (RGB split) en capas offset que simulan la refracción en agua turbulenta.
+* **Cero memoria**: En ausencia de movimiento, el espejismo se disipa y evapora en menos de 1 segundo, devolviendo el espacio a la quietud y oscuridad absoluta.
 
 ---
 
@@ -102,3 +99,5 @@ python3 acontecimiento.py
 ---
 
 *Felipe Roa R. // DPPI 2026 — Escuela de Diseño UDP*
+   
+     
