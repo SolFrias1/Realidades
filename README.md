@@ -5,16 +5,22 @@
 **Ejercicio 02 — Percepción Artificial y Representación (DPPI 2026)**  
 Escuela de Diseño UDP  
 Autor: Felipe Roa R.
+Demo: https://solfrias1.github.io/Realidades/
 
 ---
 
-## Reflexión Conceptual
+## Reflexión
 
-La obra explora cómo una misma realidad puede producir distintas formas de existencia dependiendo de aquello que se decide observar. Porque percibir no es simplemente recibir información: también es seleccionar, reducir e interpretar.
+¿Qué es la percepción, al final, sino aquello que solo nosotros podemos ver?
+Cada mirada selecciona. Lo que para uno puede ser evidente, para otro puede adquirir un sentido completamente distinto; no porque exista necesariamente una única verdad detrás de aquello que observamos, sino porque cada forma de percibir está configurada para reconocer ciertas cosas y dejar otras fuera.
 
-Frente a una misma cámara, cada sistema construye una versión posible de lo que ocurre a partir de aquello que puede reconocer; uno encuentra una estructura corporal, mientras el otro registra únicamente aquello que cambia. Lo observado permanece, pero la lectura lo transforma.
+Una representación nunca es aquello que representa; se puede convertir un cuerpo en puntos, coordenadas, siluetas o diferencias, pero ninguna de esas formas consigue contenerlo por completo. Al representar, algo se revela y, al mismo tiempo, algo queda fuera.
 
-Estas versiones no buscan establecer una única verdad, sino hacer visible que toda interpretación tiene un punto de vista y, por lo tanto, un límite. Cada sistema revela algo y, al mismo tiempo, deja otras cosas fuera. Tal vez comprender una realidad no consiste en reducirla a una sola explicación, sino en permitir que pueda existir de distintas maneras al mismo tiempo. Nunca dejas de ser tú frente a la cámara; simplemente aparece una versión de ti que quizás todavía no habías conocido aún.
+La tecnología, por ende,  como cualquier objeto o herramienta creada por el humano,  tampoco observa desde un lugar neutro. Cada sistema ha sido construido para buscar, reconocer y transformar determinados aspectos de aquello que tiene delante. Una misma presencia puede convertirse en estructura o en cambio; en memoria o en perturbación. Lo observado permanece, pero la lectura lo transforma.
+
+Estas dos realidades exploran precisamente ese límite: qué ocurre cuando una misma realidad es sometida a dos criterios distintos de existencia. Una máquina puede recordar el cuerpo por su estructura; otra puede registrar únicamente aquello que cambia. Una conserva la presencia; la otra la deja desaparecer cuando el movimiento cesa.
+
+Quizás percibir no consiste en encontrar una realidad definitiva, sino en reconocer que toda lectura construye una versión posible de ella. Nunca dejas de ser tú frente a la cámara; simplemente aparece una versión de ti que quizás todavía no habías conocido.
 
 ---
 
