@@ -5,6 +5,7 @@
 **Ejercicio 02 — Percepción Artificial y Representación (DPPI 2026)**  
 Escuela de Diseño UDP  
 Autor: Felipe Roa R.
+
 Demo: https://solfrias1.github.io/Realidades/
 
 ---
